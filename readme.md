@@ -5,6 +5,10 @@
 
 Zero distractions, Zero comments, Zero algorithms ✨
 
+## TO DO
+* Fix thumbnail letterbox
+* Better player window on mobile/thumbnail rendering
+
 ## Demo Config
 ```
 channels:
