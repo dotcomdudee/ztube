@@ -1,26 +1,21 @@
 import json
 import os
-import random
 import time
+import requests
 from datetime import datetime, timezone
 from dateutil import parser
 from flask import Flask, render_template, jsonify, request, session, send_file
-from googleapiclient.discovery import build
 import uuid
 import yaml
+import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # You should ensure that this is set to something strong and unique!
-API_KEYS = []
+app.secret_key = 'supersecretkey' # Change this to something long and secure!
 CHANNEL_IDS = []
-CACHE_EXPIRY_TIME = 86400  # We use a cache of API results to avoid hitting API quotas from Youtube. At the moment it is set to 24 hours in seconds.
+CACHE_EXPIRY_TIME = 1800  # Cache expiry set to 30 minutes
 USERFILES_DIR = os.path.join(os.path.dirname(__file__), 'userfiles')
-
 if not os.path.exists(USERFILES_DIR):
     os.makedirs(USERFILES_DIR)
-
-def get_random_api_key():
-    return random.choice(API_KEYS)
 
 def get_user_cache_key():
     user_id = session.get('user_id')
@@ -54,18 +49,31 @@ def fetch_videos(start_index=0, max_results=30, user_cache_key=""):
         if cache_entry and not is_cache_expired(cache_entry.get('timestamp', 0)):
             results.extend(cache_entry['data'])
         else:
-            youtube = build('youtube', 'v3', developerKey=get_random_api_key())
-            response = youtube.search().list(
-                channelId=channel_id,
-                part="snippet",
-                maxResults=max_results,
-                order="date"
-            ).execute()
-            cache[cache_key] = {
-                'timestamp': time.time(),
-                'data': response['items']
-            }
-            results.extend(response['items'])
+            url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
+            response = requests.get(url)
+            if response.status_code == 200:
+                root = ET.fromstring(response.content)
+                channel_videos = []
+                for entry in root.findall('{http://www.w3.org/2005/Atom}entry'):
+                    video_data = {
+                        'id': {'videoId': entry.findtext('{http://www.youtube.com/xml/schemas/2015}videoId')},
+                        'snippet': {
+                            'publishedAt': entry.findtext('{http://www.w3.org/2005/Atom}published'),
+                            'title': entry.findtext('{http://www.w3.org/2005/Atom}title'),
+                            'channelTitle': entry.find('{http://www.w3.org/2005/Atom}author').findtext('{http://www.w3.org/2005/Atom}name'),
+                            'thumbnails': {
+                                'medium': {
+                                    'url': entry.find('{http://search.yahoo.com/mrss/}group').find('{http://search.yahoo.com/mrss/}thumbnail').attrib['url']
+                                }
+                            }
+                        }
+                    }
+                    channel_videos.append(video_data)
+                cache[cache_key] = {
+                    'timestamp': time.time(),
+                    'data': channel_videos
+                }
+                results.extend(channel_videos)
     save_cache(cache, user_cache_key)
     results.sort(key=lambda x: x['snippet']['publishedAt'], reverse=True)
     return results[start_index:start_index + max_results]
@@ -99,9 +107,10 @@ def index():
             return render_template('config_input.html')
         with open(config_filename, 'r') as f:
             user_config = json.load(f)
-        global API_KEYS, CHANNEL_IDS
-        API_KEYS = user_config.get('api_keys', [])
+        global CHANNEL_IDS
         CHANNEL_IDS = user_config.get('channels', [])
+        if not CHANNEL_IDS:
+            return "No channels configured", 500
         user_cache_key = get_user_cache_key()
         videos = fetch_videos(user_cache_key=user_cache_key)
         for video in videos:
@@ -113,9 +122,6 @@ def index():
 @app.route('/load_more')
 def load_more():
     start_index = int(request.args.get('start_index', 0))
-    config_filename = get_config_filename()
-    with open(config_filename, 'r') as f:
-        user_config = json.load(f)
     user_cache_key = get_user_cache_key()
     videos = fetch_videos(start_index=start_index, user_cache_key=user_cache_key)
     for video in videos:
@@ -124,9 +130,6 @@ def load_more():
 
 @app.route('/video/<video_id>')
 def video(video_id):
-    config_filename = get_config_filename()
-    with open(config_filename, 'r') as f:
-        user_config = json.load(f)
     user_cache_key = get_user_cache_key()
     videos = fetch_videos(user_cache_key=user_cache_key)
     for video in videos:
