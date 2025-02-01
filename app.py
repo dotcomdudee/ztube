@@ -10,7 +10,7 @@ import yaml
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
-app.secret_key = 'yoursecretkey' # Change this to something secure!
+app.secret_key = 'yoursecretkey'  # Change this to something secure!
 CHANNEL_IDS = []
 CACHE_EXPIRY_TIME = 1800  # Cache expiry set to 30 minutes
 USERFILES_DIR = os.path.join(os.path.dirname(__file__), 'userfiles')
@@ -38,7 +38,7 @@ def save_cache(cache, user_cache_key):
 def is_cache_expired(cache_timestamp):
     return (time.time() - cache_timestamp) > CACHE_EXPIRY_TIME
 
-def fetch_videos(start_index=0, max_results=30, user_cache_key=""):
+def fetch_videos(start_index=0, max_results=48, user_cache_key=""):
     if not user_cache_key:
         raise ValueError("A valid user cache key must be provided.")
     cache = load_cache(user_cache_key)
