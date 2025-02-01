@@ -62,6 +62,8 @@ The application will be available at `http://ip:4465`
 
 2. You should ensure that `app.secret_key = 'your_secret_key_here'` is set to something unique.
 
+3. `max_results` is currently set to 48, on line 41. If you follow a larger number of channels, you may want to increase this number!
+
 ## Ads
 
 Zerotube WILL NOT remove ads. If you are a Youtube user with a Premium membership using this app on desktop (as intended), then you will have the best viewing experience.
