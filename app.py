@@ -10,7 +10,7 @@ import yaml
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey' # Change this to something long and secure!
+app.secret_key = 'yoursecretkey' # Change this to something secure!
 CHANNEL_IDS = []
 CACHE_EXPIRY_TIME = 1800  # Cache expiry set to 30 minutes
 USERFILES_DIR = os.path.join(os.path.dirname(__file__), 'userfiles')
@@ -106,7 +106,7 @@ def index():
         if not os.path.exists(config_filename):
             return render_template('config_input.html')
         with open(config_filename, 'r') as f:
-            user_config = json.load(f)
+            user_config = yaml.safe_load(f)
         global CHANNEL_IDS
         CHANNEL_IDS = user_config.get('channels', [])
         if not CHANNEL_IDS:
@@ -141,10 +141,11 @@ def video(video_id):
 def load_config():
     yaml_data = request.json.get('config', '')
     try:
-        config = yaml.safe_load(yaml_data)
+        yaml.safe_load(yaml_data)
         config_filename = get_config_filename()
+        
         with open(config_filename, 'w') as f:
-            json.dump(config, f)
+            f.write(yaml_data)
         return jsonify(success=True)
     except yaml.YAMLError as exc:
         return jsonify(success=False, error=str(exc))
