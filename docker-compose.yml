@@ -1,0 +1,11 @@
+version: '2.32.4'
+
+services:
+  app:
+    build: .
+    ports:
+      - "4465:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development

@@ -1,0 +1,5 @@
+Flask==3.1.0
+google-api-python-client==2.160.0
+python-dateutil==2.9.0.post0
+PyYAML==6.0.2
+Werkzeug>=3.1.3
