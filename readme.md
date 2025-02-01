@@ -6,7 +6,6 @@
 Zero distractions, Zero comments, Zero algorithms ✨
 
 ## TO DO
-* Fix thumbnail letterbox
 * Better player window on mobile/thumbnail rendering
 
 ## Demo Config
@@ -62,3 +61,7 @@ The application will be available at `http://ip:4465`
 1. We use a cache of XML results to keep things fast. At the moment it is set to 30 mins. You can change this by modifying `CACHE_EXPIRY_TIME = 1800` in app.py. 
 
 2. You should ensure that `app.secret_key = 'your_secret_key_here'` is set to something unique.
+
+## Ads
+
+Zerotube WILL NOT remove ads. If you are a Youtube user with a Premium membership using this app on desktop (as intended), then you will have the best viewing experience.
