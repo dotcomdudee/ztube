@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+      <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='apple-icon-57x57.png') }}">
+      <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='apple-icon-60x60.png') }}">
+      <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='apple-icon-72x72.png') }}">
+      <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='apple-icon-76x76.png') }}">
+      <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='apple-icon-114x114.png') }}">
+      <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='apple-icon-120x120.png') }}">
+      <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='apple-icon-144x144.png') }}">
+      <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='apple-icon-152x152.png') }}">
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-icon-180x180.png') }}">
+      <link rel="icon" type="image/png" sizes="192x192"  href="{{ url_for('static', filename='android-icon-192x192.png') }}">
+      <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+      <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicon-96x96.png') }}">
+      <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+      <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+      <meta name="msapplication-TileColor" content="#fff">
+      <meta name="msapplication-TileImage" content="{{ url_for('static', filename='ms-icon-144x144.png') }}">
+      <meta name="theme-color" content="#fff">
+      <meta name="description" content="Zero distractions, Zero comments, Zero algorithms ✨">
+      <meta property="og:title" content="Ztube">
+      <meta property="og:description" content="Zero distractions, Zero comments, Zero algorithms ✨">
+      <meta property="og:image" content="https://cdn.stord.site/files/32268/youtube_1738413332.png">
+      <meta property="og:url" content="https://ztube.app">
+      <meta property="og:type" content="website">
+      <title>YouTube</title>
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Geist:wght@100..900&display=swap');  
+         body {
+         background-color: #161616;
+         color: white;
+         font-family: "Geist", serif;
+         margin: 0;
+         padding: 20px;
+         max-width: 70%;
+         margin-left: auto;
+         margin-right: auto;
+         padding-top: 100px;
+         }
+         .video-container {
+         display: grid;
+         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+         gap: 20px;
+         }
+         .video-card {
+         background-color: #242424;
+         padding: 10px;
+         border-radius: 5px;
+         transition: background-color 0.3s;
+         display: flex;
+         flex-direction: column;
+         }
+         .video-card:hover {
+         background-color: #333;
+         }
+         .video-card a {
+         color: white;
+         text-decoration: none;
+         }
+         .video-card img {
+         width: 100%;
+         height: auto;
+         border-radius: 5px;
+         display: block;
+         margin-bottom: 5px;
+         object-fit: cover;
+         }
+         h3 {
+         margin: 5px 0;
+         font-size: 16px;
+         }
+         .channel-name {
+         margin: 5px 0;
+         font-size: 14px;
+         color: #aaa;
+         line-height: 2px;
+         }
+         .time-ago {
+         margin: 5px 0;
+         font-size: 14px;
+         color: #;
+         line-height: 2px;
+         }
+         p {
+         font-size: 14px;
+         color: #ccc;
+         }
+         #load-more {
+         cursor: pointer;
+         padding: 10px 20px;
+         margin: 20px;
+         background-color: #242424;
+         border: none;
+         color: white;
+         border-radius: 5px;
+         display: block;
+         }
+         #load-more:hover {
+         background-color: #555;
+         }
+         a {
+         color: inherit;
+         text-decoration: none;
+         }
+         a:hover {
+         text-decoration: none;
+         }
+         h1 {
+         font-family: "Doto", serif !important;
+         font-size: 32px;
+         font-weight: 400;
+         margin: 0;
+         }
+         h1 a {
+         color: inherit;
+         text-decoration: none;
+         }
+         button {
+         font-family: "Geist", serif;
+         font-size: 16px;
+         font-weight: 900;
+         }
+         #load-more-container {
+         display: flex;
+         justify-content: center;
+         }
+         #load-more-container a {
+         text-decoration: none;
+         }
+         #load-more {
+         cursor: pointer;
+         padding: 10px 20px;
+         background-color: #242424;
+         border: none;
+         color: white;
+         border-radius: 5px;
+         font-family: "Geist", serif;
+         font-size: 16px;
+         font-weight: 400;
+         }
+         #load-more:hover {
+         background-color: #555;
+         }
+         .video-wrapper {
+         position: relative;
+         width: 100%;
+         padding-top: 56.25%;
+         background-color: black;
+         margin-bottom: 20px;
+         border-radius: 5px;
+         overflow: hidden;
+         }
+         #video-player {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         border: 0;
+         }
+         header {
+         background-color: #000;
+         color: white;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         box-shadow: 0 4px 2px -2px #242424;
+         z-index: 1000;
+         }
+         .header-container {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 0 20px;
+         }
+         header h1, header p {
+         margin: 0;
+         padding: 0 20px;
+         }
+         .plyr__video-embed {
+         width: 100% !important;
+         margin-bottom: 120px  !important;
+         }
+         @media (max-width: 600px) {
+         body {
+         max-width: 95%;
+         }
+         .plyr__video-embed {
+         width: 80% !important;
+         margin-bottom: 180px  !important;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <script>
+         document.addEventListener('DOMContentLoaded', async () => {
+             const userConfig = localStorage.getItem('userConfig');
+             if (userConfig) {
+                 const response = await fetch('/load_config', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json'
+                     },
+                     body: JSON.stringify({ config: userConfig })
+                 });
+                 if (!response.ok) {
+                     console.error('Failed to load configuration');
+                 }
+             }
+         });
+      </script>
+      <header>
+         <div class="header-container">
+            <h1><a href="/">Zero<span style="color: red !important;">tube</span></a></h1>
+            <div id="load-more-container">
+               <a href="/">
+               <button id="load-more">Home ✨</button>
+               </a>
+            </div>
+         </div>
+      </header>
+      <div class="video-container" id="video-container">
+         {% for video in videos %}
+         <a href="/video/{{ video.id.videoId }}" style="text-decoration: none;">
+            <div class="video-card">
+               <img src="{{ video.snippet.thumbnails.medium.url }}" alt="{{ video.snippet.title | safe }}">
+               <h3>
+                  {% if video.snippet.title|length > 52 %}
+                  {{ video.snippet.title[:42] | safe }}..
+                  {% else %}
+                  {{ video.snippet.title | safe }}
+                  {% endif %}
+               </h3>
+               <div class="channel-name">{{ video.snippet.channelTitle | safe }}</div>
+               <p>{{ video.time_ago | safe }}</p>
+            </div>
+         </a>
+         {% endfor %}
+      </div>
+      <br>
+      <div id="load-more-container">
+         <button id="load-more">Load More</button>
+      </div>
+      <p align="center">© 3035 Zerotube ✨</p>
+      <p align="center">Zero distractions, Zero comments, Zero algorithms.</p>
+      <center><a href="/config">
+         <button id="load-more">Edit .yml configuration</button>
+         </a>
+      </center>
+      <script>
+         const loadMoreButton = document.getElementById('load-more');
+         let startIndex = 12;
+         loadMoreButton.addEventListener('click', () => {
+             fetch(`/load_more?start_index=${startIndex}`)
+                 .then(response => response.json())
+                 .then(videos => {
+                     const videoContainer = document.getElementById('video-container');
+                     videos.forEach(video => {
+                         const videoCard = document.createElement('div');
+                         videoCard.className = 'video-card';
+                         videoCard.innerHTML = `
+                             <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank">
+                                 <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
+                                 <h3>${video.snippet.title.length > 20 ? video.snippet.title.slice(0, 18) + '..' : video.snippet.title}</h3>
+                             </a>
+                             <div class="channel-name">${video.snippet.channelTitle}</div>
+                             <p>${video.time_ago}</p>
+                         `;
+                         videoContainer.appendChild(videoCard);
+                     });
+                     startIndex += 12;
+                 })
+                 .catch(error => console.error('Error loading more videos:', error));
+         });
+      </script>
+   </body>
+</html>
