@@ -37,6 +37,8 @@ channels:
 2. To find Channel ID:
 > Creators Youtube page -> click channel description -> click Share Channel -> copy Channel ID.
 
+You can also attempt to use 'Takeout' to download a subscriptions list: [Google Takeout](https://takeout.google.com/settings/takeout)
+
 ## Running with Docker
 
 1. Clone this repo:
