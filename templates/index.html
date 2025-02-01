@@ -27,7 +27,7 @@
       <meta property="og:image" content="https://cdn.stord.site/files/32268/youtube_1738413332.png">
       <meta property="og:url" content="https://ztube.app">
       <meta property="og:type" content="website">
-      <title>YouTube</title>
+      <title>Zerotube</title>
       <style>
          @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Geist:wght@100..900&display=swap');  
          body {
@@ -231,10 +231,10 @@
          {% for video in videos %}
          <a href="/video/{{ video.id.videoId }}" style="text-decoration: none;">
             <div class="video-card">
-               <img src="{{ video.snippet.thumbnails.medium.url }}" alt="{{ video.snippet.title | safe }}">
+               <img src="https://img.youtube.com/vi/{{ video.id.videoId }}/mqdefault.jpg" alt="{{ video.snippet.title | safe }}">
                <h3>
-                  {% if video.snippet.title|length > 52 %}
-                  {{ video.snippet.title[:42] | safe }}..
+                  {% if video.snippet.title|length > 29 %}
+                  {{ video.snippet.title[:25] | safe }}..
                   {% else %}
                   {{ video.snippet.title | safe }}
                   {% endif %}
@@ -252,31 +252,5 @@
          <button id="load-more">Edit .yml configuration</button>
          </a>
       </center>
-      <script>
-         const loadMoreButton = document.getElementById('load-more');
-         let startIndex = 12;
-         loadMoreButton.addEventListener('click', () => {
-             fetch(`/load_more?start_index=${startIndex}`)
-                 .then(response => response.json())
-                 .then(videos => {
-                     const videoContainer = document.getElementById('video-container');
-                     videos.forEach(video => {
-                         const videoCard = document.createElement('div');
-                         videoCard.className = 'video-card';
-                         videoCard.innerHTML = `
-                             <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank">
-                                 <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
-                                 <h3>${video.snippet.title.length > 20 ? video.snippet.title.slice(0, 18) + '..' : video.snippet.title}</h3>
-                             </a>
-                             <div class="channel-name">${video.snippet.channelTitle}</div>
-                             <p>${video.time_ago}</p>
-                         `;
-                         videoContainer.appendChild(videoCard);
-                     });
-                     startIndex += 12;
-                 })
-                 .catch(error => console.error('Error loading more videos:', error));
-         });
-      </script>
    </body>
 </html>
