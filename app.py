@@ -10,7 +10,7 @@ import yaml
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
-app.secret_key = 'yoursecretkey'  # Change this to something secure!
+app.secret_key = 'd3e42de5f50330fb8efc4c55998352x78077b21e9aa0b33c1df'  # Change this to something secure!
 CHANNEL_IDS = []
 CACHE_EXPIRY_TIME = 1800  # Cache expiry set to 30 minutes
 USERFILES_DIR = os.path.join(os.path.dirname(__file__), 'userfiles')
@@ -135,7 +135,8 @@ def video(video_id):
     for video in videos:
         video['time_ago'] = time_ago(video['snippet']['publishedAt'])
     video_to_play = next((video for video in videos if video['id']['videoId'] == video_id), videos[0])
-    return render_template('player.html', video_id=video_to_play['id']['videoId'], videos=videos)
+    video_title = video_to_play['snippet']['title']
+    return render_template('player.html', video_id=video_to_play['id']['videoId'], video_title=video_title, videos=videos)
 
 @app.route('/load_config', methods=['POST'])
 def load_config():
