@@ -44,7 +44,7 @@ A simple and fast method for extracting your YouTube subscriptions ✨
 2. Head to https://www.youtube.com/feed/channels and load the entire page (you may need to scroll down)
 3. Right click and view page source code 
 4. Copy and paste the FULL page source code to a text file and save it as 'viewsource.txt' in the same directory
-5. Run 'python3 getsubs.py'
+5. Run `python3 getsubs.py`
 6. A new file should be generated 'extracted_channels.yml'
 7. ✨
 
