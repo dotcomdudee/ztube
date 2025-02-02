@@ -22,12 +22,13 @@
       <meta name="msapplication-TileImage" content="{{ url_for('static', filename='ms-icon-144x144.png') }}">
       <meta name="theme-color" content="#fff">
       <meta name="description" content="Zero distractions, Zero comments, Zero algorithms ✨">
-      <meta property="og:title" content="Ztube">
+      <meta property="og:title" content="{{ video_title }}">
       <meta property="og:description" content="Zero distractions, Zero comments, Zero algorithms ✨">
-      <meta property="og:image" content="https://cdn.stord.site/files/32268/youtube_1738413332.png">
+	  <meta property="og:image" content="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg">
       <meta property="og:url" content="https://ztube.app">
       <meta property="og:type" content="website">
-      <title>Zerotube</title>
+      <title>{{ video_title }}</title>
+	  
       <style>
          @import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Geist:wght@100..900&display=swap');
          body {
